@@ -1,4 +1,4 @@
-package nl.grip.trimfilter;
+package nl.grip.trimfilter.jvx;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
