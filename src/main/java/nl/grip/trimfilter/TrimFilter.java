@@ -2,61 +2,63 @@ package nl.grip.trimfilter;
 
 import java.io.IOException;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+public class TrimFilter implements javax.servlet.Filter, jakarta.servlet.Filter {
 
-public class TrimFilter implements Filter {
-    private FilterConfig        config;
     private boolean             no_init = true;
     private String              excluded;
     private static final String EXCLUDE = "exclude";
 
-    public void init(FilterConfig paramFilterConfig) throws ServletException {
+    public void init(javax.servlet.FilterConfig paramFilterConfig) throws javax.servlet.ServletException {
         this.no_init = false;
-        this.config = paramFilterConfig;
         if ((this.excluded = paramFilterConfig.getInitParameter(EXCLUDE)) != null)
             this.excluded += ",";
     }
 
-    public void destroy() {
-        this.config = null;
-    }
-
-    public FilterConfig getFilterConfig() {
-        return this.config;
-    }
-
-    public void setFilterConfig(FilterConfig paramFilterConfig) {
+    public void setFilterConfig(javax.servlet.FilterConfig paramFilterConfig) {
         if (!(this.no_init))
             return;
         this.no_init = false;
-        this.config = paramFilterConfig;
         if ((this.excluded = paramFilterConfig.getInitParameter(EXCLUDE)) != null)
             this.excluded += ",";
     }
 
-    public void doFilter(ServletRequest paramServletRequest, ServletResponse paramServletResponse, FilterChain paramFilterChain)
-            throws IOException, ServletException {
+    @Override
+    public void doFilter(javax.servlet.ServletRequest request, javax.servlet.ServletResponse response, javax.servlet.FilterChain paramFilterChain)
+            throws IOException, javax.servlet.ServletException {
 
-        String str1 = ((HttpServletRequest) paramServletRequest).getRequestURI();
+        String str1 = ((javax.servlet.http.HttpServletRequest) request).getRequestURI();
         if (excluded(str1)) {
-            paramFilterChain.doFilter(paramServletRequest, paramServletResponse);
+            paramFilterChain.doFilter(request, response);
         } else {
-            TrimResponseWrapper localtrimResponseWrapper = new TrimResponseWrapper((HttpServletResponse) paramServletResponse);
-            paramFilterChain.doFilter(paramServletRequest, localtrimResponseWrapper);
+            nl.grip.trimfilter.jvx.TrimResponseWrapper localtrimResponseWrapper = new nl.grip.trimfilter.jvx.TrimResponseWrapper(
+                    (javax.servlet.http.HttpServletResponse) response);
+            paramFilterChain.doFilter(request, localtrimResponseWrapper);
         }
+    }
+
+    @Override
+    public void doFilter(jakarta.servlet.ServletRequest request, jakarta.servlet.ServletResponse response, jakarta.servlet.FilterChain chain)
+            throws IOException, jakarta.servlet.ServletException {
+
+        String str1 = ((jakarta.servlet.http.HttpServletRequest) request).getRequestURI();
+        if (excluded(str1)) {
+            chain.doFilter(request, response);
+        } else {
+            nl.grip.trimfilter.jakarta.TrimResponseWrapper localtrimResponseWrapper = new nl.grip.trimfilter.jakarta.TrimResponseWrapper(
+                    (jakarta.servlet.http.HttpServletResponse) response);
+            chain.doFilter(request, localtrimResponseWrapper);
+        }
+
     }
 
     private boolean excluded(String paramString) {
         if ((paramString == null) || (this.excluded == null))
             return false;
         return (this.excluded.indexOf(paramString + ",") >= 0);
+    }
+
+    @Override
+    public void destroy() {
     }
 
 }
