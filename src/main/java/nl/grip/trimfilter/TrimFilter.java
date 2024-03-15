@@ -2,7 +2,7 @@ package nl.grip.trimfilter;
 
 import java.io.IOException;
 
-public class TrimFilter implements javax.servlet.Filter, jakarta.servlet.Filter {
+public class TrimFilter implements javax.servlet.Filter {
 
     private boolean             no_init = true;
     private String              excluded;
@@ -34,21 +34,6 @@ public class TrimFilter implements javax.servlet.Filter, jakarta.servlet.Filter 
                     (javax.servlet.http.HttpServletResponse) response);
             paramFilterChain.doFilter(request, localtrimResponseWrapper);
         }
-    }
-
-    @Override
-    public void doFilter(jakarta.servlet.ServletRequest request, jakarta.servlet.ServletResponse response, jakarta.servlet.FilterChain chain)
-            throws IOException, jakarta.servlet.ServletException {
-
-        String str1 = ((jakarta.servlet.http.HttpServletRequest) request).getRequestURI();
-        if (excluded(str1)) {
-            chain.doFilter(request, response);
-        } else {
-            nl.grip.trimfilter.jakarta.TrimResponseWrapper localtrimResponseWrapper = new nl.grip.trimfilter.jakarta.TrimResponseWrapper(
-                    (jakarta.servlet.http.HttpServletResponse) response);
-            chain.doFilter(request, localtrimResponseWrapper);
-        }
-
     }
 
     private boolean excluded(String paramString) {
