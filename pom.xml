@@ -7,6 +7,32 @@
   <version>1.0.0</version>
   <packaging>jar</packaging>
 
+  <name>HTML whitespace filter for Java</name>
+  <description>A Servlet Filter to remove unneeded whitespace from HTML responses</description>
+  <url>https://github.com/GripOnline/java-trimfilter</url>
+
+  <licenses>
+    <license>
+      <name>The Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Erik Hoogeboom</name>
+      <email>hoogeboom@grip.nl</email>
+      <organization>Grip Online</organization>
+      <organizationUrl>https://www.grip.nl/</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git://github.com/GripOnline/java-trimfilter.git</connection>
+    <developerConnection>scm:git:ssh://github.com:GripOnline/java-trimfilter.git</developerConnection>
+    <url>https://github.com/GripOnline/java-trimfilter/tree/main</url>
+  </scm>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
@@ -98,6 +124,30 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>1.5</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.sonatype.central</groupId>
+        <artifactId>central-publishing-maven-plugin</artifactId>
+        <version>0.4.0</version>
+        <extensions>true</extensions>
+        <configuration>
+          <publishingServerId>central</publishingServerId>
+          <tokenAuth>true</tokenAuth>
+        </configuration>
       </plugin>
     </plugins>
   </build>
